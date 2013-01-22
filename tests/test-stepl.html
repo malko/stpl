@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Stpl test suite</title>
+	<link type="text/css" rel="stylesheet" href="qunit-1.10.0.css" media="all" />
+
+</head>
+<body>
+  <div id="qunit"></div>
+	<script type="text/javascript" src="qunit-1.10.0.js"></script>
+	<script type="text/javascript" src="../stepl.js"></script>
+	<script type="text/stpl" rel="personInfo">
+		<div>{{firstname}} {{lastname}} is {{age}} years old</div>
+	</script>
+	<script type="text/stpl" rel="presonInfoUnEscapedDesc">
+		<div>{{firstname}} {{lastname}} is {{age}} years old {{description}}</div>
+	</script>
+	<script type="text/stpl" rel="presonInfoEscapedDesc">
+		<div>{{firstname}} {{lastname}} is {{age}} years old {{{description}}}</div>
+	</script>
+	<script type="text/stpl" rel="children">
+		<ul>
+			{{#childs}}<li>{{firstname}} {{lastname}}</li>{{/childs}}
+		</ul>
+	</script>
+	<script>
+		function stronger(a){
+			return '<strong>'+a+'</strong>';
+		}
+		function firstLetter(a){
+			return a.substr(0,1);
+		}
+		function getInitials(a){
+			if( a instanceof Array){
+				var res = [];
+				a.forEach(function(v,k){
+					res.push( getInitials(v));
+				});
+				return res;
+			}
+			return firstLetter(a.firstname)+'.'+firstLetter(a.lastname)+'.';
+		}
+		function reverse(a){return a.reverse();}
+		function count(a){ return a.length };
+		var testDatas= {
+			firstname:'John'
+			,lastname:'Doe'
+			,age:55
+			,description:'<b>"it\'s a string which contains escapable chars"</b>'
+			,childs:[
+				{
+					firstname:'Jack'
+					,lastname:'Doe'
+					,age:20
+				}
+				,{
+					firstname:'Jannice'
+					,lastname:'Doe'
+					,age:16
+				}
+			]
+		};
+
+
+		test("basic strings replacement", function() {
+			equal(stpl('personInfo',testDatas),'<div>John Doe is 55 years old</div>',"replacing multiple double stashed values");
+			equal(stpl('presonInfoUnEscapedDesc',testDatas),'<div>John Doe is 55 years old <b>"it\'s a string which contains escapable chars"</b></div>',"checking escapable values with double stash");
+			equal(stpl('presonInfoEscapedDesc',testDatas),'<div>John Doe is 55 years old &lt;b&gt;&quot;it&#x27;s a string which contains escapable chars&quot;&lt;/b&gt;</div>',"checking escapable values with double stash");
+		});
+
+		test("working with list of elements and filters", function() {
+			equal(stpl('children',testDatas),'<ul>\n\
+			<li>Jack Doe</li><li>Jannice Doe</li>\n\
+		</ul>','each elements');
+			equal(stpl.renderString('<div>{{childs|count}} {{childs.length}}</div>',testDatas),'<div>2 2</div>','getting count by .length and filter');
+			equal(stpl.renderString('<div>{{childs|count}}{{#childs}} {{.|getInitials}}{{/childs}}</div>',testDatas),'<div>2 J.D. J.D.</div>','getting dotted property + filtering');
+			equal(stpl.renderString('<ul>{{#.}}<li>{{.}}</li>{{/.}}</ul>',['item1','item2','item3']),'<ul><li>item1</li><li>item2</li><li>item3</li></ul>','getting dotted property');
+		});
+		test('Working with conditionals replacement',function(){
+			stpl.registerFilter('isJack',function(a){return (a==='Jack')?a:null;});
+			equal(stpl.renderString('{{#childs}}{{firstname|isJack?}} {{firstname}} {{lastname|firstLetter}}.{{?firstname|isJack}}{{/childs}}',testDatas),' Jack D.','testing filtered prop');
+			equal(stpl.renderString('{{#childs}}{{firstname|isJack?}} {{firstname}} {{lastname|firstLetter}}.{{?firstname}}{{/childs}}',testDatas),' Jack D.','testing filtered prop with only ?propName as ending tag');
+			equal(stpl.renderString('{{#childs}}{{firstname|isJack!?}} {{firstname}} {{lastname|firstLetter}}.{{?firstname|isJack}}{{/childs}}',testDatas),' Jannice D.','testing negative filtered prop');
+			equal(stpl.renderString('{{#childs}}{{firstname|isJack!?}} {{firstname}} {{lastname|firstLetter}}.{{?firstname}}{{/childs}}',testDatas),' Jannice D.','testing negative filtered prop with only ?propName as ending tag');
+			equal(stpl.renderString('{{#childs}}{{firstname|=Jack!?}} {{firstname}} {{lastname|firstLetter}}.{{?firstname}}{{/childs}}',testDatas),' Jannice D.','testing negative filtered prop using basic inequality filters');
+			equal(stpl.renderString('{{#childs}}{{firstname|!=Jack?}} {{firstname}} {{lastname|firstLetter}}.{{?firstname}}{{/childs}}',testDatas),' Jannice D.','testing negative filtered prop using basic inequality filters');
+		});
+		test('accessing ancestor properties in each child elements',function(){
+			equal(
+				stpl.renderString('{{#childs}}<div>{{firstname}} is child of {{../firstname}} {{../lastname}}</div>{{/childs}}',testDatas)
+				,'<div>Jack is child of John Doe</div><div>Jannice is child of John Doe</div>'
+				,'accessing ancestore property by ../'
+			);
+			equal(
+				stpl.renderString('{{#childs}}<div>{{firstname}} is child of {{/firstname}} {{/lastname}}</div>{{/childs}}',testDatas)
+				,'<div>Jack is child of John Doe</div><div>Jannice is child of John Doe</div>'
+				,'accessing ancestore property by /'
+			);
+		});
+
+	</script>
+</body>
+</html>
