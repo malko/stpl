@@ -66,7 +66,7 @@
 		test("basic strings replacement", function() {
 			equal(stpl('personInfo',testDatas),'<div>John Doe is 55 years old</div>',"replacing multiple double stashed values");
 			equal(stpl('presonInfoUnEscapedDesc',testDatas),'<div>John Doe is 55 years old <b>"it\'s a string which contains escapable chars"</b></div>',"checking escapable values with double stash");
-			equal(stpl('presonInfoEscapedDesc',testDatas),'<div>John Doe is 55 years old &lt;b&gt;&quot;it&#x27;s a string which contains escapable chars&quot;&lt;/b&gt;</div>',"checking escapable values with double stash");
+			equal(stpl('presonInfoEscapedDesc',testDatas),'<div>John Doe is 55 years old &lt;b&gt;&quot;it&#x27;s a string which contains escapable chars&quot;&lt;/b&gt;</div>',"checking escapable values with triple stash");
 		});
 
 		test("working with list of elements and filters", function() {
