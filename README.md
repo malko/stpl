@@ -2,6 +2,7 @@ stpl
 ====
 
 really lightweight and simple javascript template system
+[![Build Status](https://travis-ci.org/malko/stpl.png?branch=master)](https://travis-ci.org/malko/stpl)
 
 ##supported syntax:
 
