@@ -1,0 +1,27 @@
+{
+  "name": "stpl"
+  , "main": "lib/stpl.js"
+  , "version": "0.1.1"
+  , "homepage": "https://github.com/malko/stpl"
+  , "authors": [
+    "malko <jgotti@jgotti.org>"
+  ]
+  , "description": "tiny mustache extended style template system"
+  , "keywords": [
+        "template"
+        , "mustache"
+        , "RegExp"
+  ]
+  , "license": "MIT"
+  , "repository": {
+        "type": "git"
+        , "url": "https://github.com/malko/stpl"
+  }
+  , "ignore": [
+        "**/.*"
+        , "node_modules"
+        , "bower_components"
+        , "test"
+        , "tests"
+  ]
+}
