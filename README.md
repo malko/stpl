@@ -11,10 +11,13 @@ really lightweight and simple javascript template system
  - if syntax: ``{{varname?}}varname as a value{{?varname}}``
  - if not syntax ``{{varname!?}}varname as a value{{?varname}}``
  - loop through each elements ``{{#elements}}<li>{{propname}}</li>{{/elements}}``
+    - even using alias ``{{#elements as elmt}}<li>{{elmt.propname}}</li>{{/elements}}``
  - support dotted notation ``{{childs.length}}``
+    - even back reference ``{{../propName}}
  - can even include sub templates ``{{>subTemplateName}}``
  - filtering properties dynamicly ``{{firstname|ucFirst}}``
-
+    - including builtin filters: empty, jsonEncode,
+ lowerCase, ucFirst, upperCase, nl2br
 ## methods:
  - stpl.registerScriptTag(DOMelment scriptTag,[String name (default to rel attribute value)]) register the content of a script type="text/stpl" as a template string
  - stpl.registerString(String name, String templateString) register a string as a template

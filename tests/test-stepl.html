@@ -77,6 +77,11 @@
 			equal(stpl.renderString('<div>{{childs|count}}{{#childs}} {{.|getInitials}}{{/childs}}</div>',testDatas),'<div>2 J.D. J.D.</div>','getting dotted property + filtering');
 			equal(stpl.renderString('<ul>{{#.}}<li>{{.}}</li>{{/.}}</ul>',['item1','item2','item3']),'<ul><li>item1</li><li>item2</li><li>item3</li></ul>','getting dotted property');
 		});
+		test("using alias for elements in list", function(){
+			equal(stpl.renderString('<div>{{childs|count}}{{#childs as child}} {{firstname}} {{child.firstname}}{{/childs}}</div>',testDatas),'<div>2 John Jack John Jannice</div>','getting property from parent scope and child scope');
+			equal(stpl.renderString('<ul>{{#. as item}}<li>{{item}}</li>{{/.}}</ul>',['item1','item2','item3']),'<ul><li>item1</li><li>item2</li><li>item3</li></ul>','getting alias from dotted property');
+			equal(stpl.renderString('<ul>{{#items as item}}<li>{{desc}} {{item.name}}</li>{{/items}}</ul>',{items:[{name:'item1'},{name:'item2'},{name:'item3'}], desc:"a list"}),'<ul><li>a list item1</li><li>a list item2</li><li>a list item3</li></ul>','getting dotted property');
+		})
 		test('Working with conditionals replacement',function(){
 			stpl.registerFilter('isJack',function(a){return (a==='Jack')?a:null;});
 			equal(stpl.renderString('{{#childs}}{{firstname|isJack?}} {{firstname}} {{lastname|firstLetter}}.{{?firstname|isJack}}{{/childs}}',testDatas),' Jack D.','testing filtered prop');
