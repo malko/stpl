@@ -1,6 +1,6 @@
 {
   "name": "stpl",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "tiny mustache extended style template system",
   "author": "Jonathan Gotti <jgotti at jgotti dot org>",
   "license": "MIT",
