@@ -3,6 +3,7 @@ stpl
 
 really lightweight and simple javascript template system
 [![Build Status](https://travis-ci.org/malko/stpl.png?branch=master)](https://travis-ci.org/malko/stpl)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmalko%2Fstpl.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmalko%2Fstpl?ref=badge_shield)
 
 ##supported syntax:
 
@@ -25,3 +26,7 @@ really lightweight and simple javascript template system
  - stpl.preload() preload all script tags with type="text/stpl" as template string using their rel attribute as name.
  - stpl.renderString(String templateString,Object datas,Object context) render the given template string using given datas. A context may be passed ans will be used for accessing parent properties for example
  - stpl(String templateName, Object datas) will render previously registered template string with given datas
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmalko%2Fstpl.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmalko%2Fstpl?ref=badge_large)
